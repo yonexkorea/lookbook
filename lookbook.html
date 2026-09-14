@@ -158,7 +158,18 @@ main#app.app-out{opacity:0;transform:translateY(-8px);filter:blur(3px);}
 .cover-cats button:hover .cc-name{transform:translateX(3px);}
 .cover-cats .cc-arrow{display:inline-block;margin-left:8px;transition:transform .25s var(--ease);}
 .cover-cats button:hover .cc-arrow{transform:translateX(4px);}
-@media(max-width:640px){.cover{min-height:min(640px, calc(100svh - var(--header-h)));} .cover-cats{margin-top:26px;} .cover-cats button{flex:1 1 100%;border-right:none;border-top:1px solid rgba(255,255,255,.2);padding:12px 22px 13px;} .cover-cats button:first-child{border-top:none;} .cover-cats .cc-name{margin-top:5px;}}
+/* mobile Safari's *small* viewport (address bar expanded -- the state
+   a page actually loads into) leaves noticeably less room here than
+   Chrome devtools device emulation ever showed during testing: with
+   less height to work with, this same fixed-height text block (still
+   bottom-anchored) ends up starting much higher up as a fraction of
+   the box, landing squarely on the model's face in the new hero photo
+   instead of below it. Shrinking the block (tighter cats spacing,
+   smaller h1) claws back headroom, and a scrim that ramps dark much
+   earlier means even a worse-case overlap reads as "text over a
+   receded photo" rather than "text over a clearly visible face".
+   Mobile-only: desktop's shorter, wider crop never showed this. */
+@media(max-width:640px){.cover{min-height:min(640px, calc(100svh - var(--header-h)));} .cover .scrim{background:linear-gradient(180deg,rgba(8,8,8,0) 0%,rgba(8,8,8,.08) 15%,rgba(6,6,6,.7) 30%,rgba(6,6,6,.92) 45%,rgba(4,4,4,.96) 100%);} .cover h1{font-size:32px;} .cover h1 .cover-season{margin-bottom:6px;} .cover-cats{margin-top:14px;} .cover-cats button{flex:1 1 100%;border-right:none;border-top:1px solid rgba(255,255,255,.2);padding:7px 22px 8px;} .cover-cats button:first-child{border-top:none;} .cover-cats .cc-name{margin-top:5px;}}
 
 /* ===== CATEGORY PAGE ===== */
 .cat-hero{padding:72px 28px 20px;max-width:1320px;margin:0 auto;}
