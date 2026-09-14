@@ -176,7 +176,6 @@ main#app.app-out{opacity:0;transform:translateY(-8px);filter:blur(3px);}
 .cat-tags{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
 .cat-tags span{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;color:#fff;background:var(--accent-cat);padding:5px 11px;}
 .cat-hero h1{font-size:clamp(34px,6vw,64px);letter-spacing:-.03em;text-transform:uppercase;}
-.cat-hero p{font-size:15px;color:var(--ink-soft);margin-top:14px;max-width:480px;line-height:1.7;font-weight:300;text-wrap:pretty;}
 .cat-count{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:26px;}
 
 .look-grid{max-width:1320px;margin:0 auto;padding:36px 28px 110px;display:grid;grid-template-columns:repeat(2,1fr);gap:56px 32px;}
@@ -207,7 +206,7 @@ body[data-cat="easy"] .look-card .lc-frame{aspect-ratio:5/6;border-radius:2px;}
 /* desktop: 2 columns at 1320px container width makes each look photo
    ~600px wide — too large. 4 across reads as a proper grid instead. */
 @media(min-width:1024px){body[data-cat] .look-grid{grid-template-columns:repeat(4,1fr);gap:48px 28px;}}
-@media(max-width:760px){.look-grid{grid-template-columns:1fr 1fr;gap:28px 16px !important;} .cat-hero{padding:52px 18px 10px;} .cat-hero p{font-size:13.5px;line-height:1.6;margin-top:10px;} .look-grid{padding:26px 18px 80px;}}
+@media(max-width:760px){.look-grid{grid-template-columns:1fr 1fr;gap:28px 16px !important;} .cat-hero{padding:52px 18px 10px;} .look-grid{padding:26px 18px 80px;}}
 @media(max-width:480px){.look-grid{grid-template-columns:1fr;}}
 
 /* fallback shown in place of a look/product photo once lookImgTag()'s whole
@@ -2322,7 +2321,6 @@ function renderCategory(key){
     <section class="cat-hero">
       <div class="cat-tags">${c.keywords.map(k=>`<span>${k}</span>`).join('')}</div>
       <h1>${c.label}</h1>
-      <p>${c.tagline} ${c.desc}</p>
       <div class="cat-count">${String(looks.length).padStart(2,'0')} LOOKS</div>
     </section>
     ${carouselHtml}
