@@ -70,10 +70,13 @@ h1,h2,h3{font-family:var(--display);font-weight:900;margin:0;letter-spacing:-.02
 /* ===== TOP NAV ===== */
 header.topnav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft);}
 .topnav-row{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 28px 10px;}
+.brand-wrap{display:flex;align-items:center;}
 .brand{display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:0;}
 .brand .mark{height:16px;width:auto;flex:none;display:block;}
 .brand .name{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);}
 .brand .season{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;display:block;margin-top:1px;}
+.season-next{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;color:var(--muted);background:none;border:1px solid var(--line-soft);border-radius:20px;padding:3px 10px;margin-left:8px;opacity:.6;cursor:not-allowed;flex:none;}
+@media(max-width:400px){.season-next{display:none;}}
 /* STYLE MIX + share + search as one right-aligned cluster, so a second
    flex child in .topnav-row (not three loose ones) is what space-between
    pushes to the far edge — kept together rather than spread apart. */
@@ -696,10 +699,13 @@ footer.lb-foot .eyebrow{justify-content:center;display:flex;text-transform:none;
 <a class="skip-link" href="#app">본문으로 건너뛰기</a>
 <header class="topnav">
   <div class="topnav-row">
-    <button class="brand" onclick="go('cover')">
-      <img class="mark" src="images/yonex-mark.png" alt="Yonex">
-      <span><span class="name">YONEX LOOKBOOK</span><span class="season">2026 F/W</span></span>
-    </button>
+    <div class="brand-wrap">
+      <button class="brand" onclick="go('cover')">
+        <img class="mark" src="images/yonex-mark.png" alt="Yonex">
+        <span><span class="name">YONEX LOOKBOOK</span><span class="season">2026 F/W</span></span>
+      </button>
+      <span class="season-next" aria-disabled="true" title="2027 S/S · 공개 예정">2027 S/S</span>
+    </div>
     <div class="topnav-right">
       <button class="mix-link" onclick="go('mix')">STYLE MIX</button>
       <button class="search-toggle" onclick="shareCurrentPage(this)" aria-label="Share this page">
