@@ -74,10 +74,18 @@ header.topnav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88)
 .brand{display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:0;}
 .brand .mark{height:16px;width:auto;flex:none;display:block;}
 .brand .name{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);}
-.season-toggle{display:flex;align-items:center;border:1px solid var(--line-soft);border-radius:20px;overflow:hidden;flex:none;}
-.season-toggle .st-btn{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:4px 9px;white-space:nowrap;}
-.season-toggle .st-active{background:var(--ink);color:#fff;}
-.season-toggle .st-disabled{color:var(--muted);opacity:.55;cursor:not-allowed;}
+.season-wrap{position:relative;flex:none;}
+.season-toggle-btn{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--ink);background:none;border:1px solid var(--line-soft);border-radius:20px;padding:4px 10px;cursor:pointer;transition:border-color .2s;white-space:nowrap;}
+.season-toggle-btn:hover{border-color:var(--ink);}
+.season-toggle-btn .stb-chev{flex:none;transition:transform .2s;}
+.season-toggle-btn[aria-expanded="true"] .stb-chev{transform:rotate(180deg);}
+.season-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:168px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 14px 32px rgba(20,20,15,.14);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .2s var(--ease-out),transform .2s var(--ease-out),visibility .2s;z-index:250;}
+.season-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
+.sm-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:10px 12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;border:none;background:none;text-align:left;cursor:pointer;color:var(--ink);}
+.sm-item+.sm-item{border-top:1px solid var(--line-soft);}
+.sm-item.sm-disabled{color:var(--muted);opacity:.6;cursor:not-allowed;}
+.sm-check{color:var(--accent);font-weight:700;}
+.sm-tag{font-size:10px;color:var(--muted);}
 /* STYLE MIX + share + search as one right-aligned cluster, so a second
    flex child in .topnav-row (not three loose ones) is what space-between
    pushes to the far edge — kept together rather than spread apart. */
@@ -133,7 +141,7 @@ header.topnav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88)
    WEAR/EASY WEAR meet the row's edges (matching the utility row above
    it) only where the row is genuinely tight. */
 @media(max-width:480px){.catnav-row{justify-content:space-between;}}
-@media(max-width:400px){.season-toggle .st-btn{padding:3px 7px;font-size:10px;} .search-toggle{width:26px;height:26px;} .mix-link{height:26px;padding:0 10px;} .catnav-row{gap:16px;} .catnav-row button{font-size:11px;}}
+@media(max-width:400px){.season-toggle-btn{padding:3px 8px;font-size:10px;} .search-toggle{width:26px;height:26px;} .mix-link{height:26px;padding:0 10px;} .catnav-row{gap:16px;} .catnav-row button{font-size:11px;}}
 
 main#app{min-height:70vh;transition:opacity .22s var(--ease-out),transform .22s var(--ease-out),filter .22s var(--ease-out);}
 main#app.app-out{opacity:0;transform:translateY(-8px);filter:blur(3px);}
@@ -705,9 +713,19 @@ footer.lb-foot .eyebrow{justify-content:center;display:flex;text-transform:none;
         <img class="mark" src="images/yonex-mark.png" alt="Yonex">
         <span class="name">YONEX LOOKBOOK</span>
       </button>
-      <div class="season-toggle">
-        <span class="st-btn st-active">26 F/W</span>
-        <span class="st-btn st-disabled" aria-disabled="true" title="2027 S/S · 공개 예정">27 S/S</span>
+      <div class="season-wrap">
+        <button class="season-toggle-btn" onclick="toggleSeasonMenu()" id="seasonToggleBtn" aria-haspopup="true" aria-expanded="false">
+          <span>26 F/W</span>
+          <svg class="stb-chev" width="8" height="8" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="season-menu" id="seasonMenu">
+          <button class="sm-item sm-active" onclick="closeSeasonMenu()" aria-current="true">
+            <span class="sm-name">2026 F/W</span><span class="sm-check">&#10003;</span>
+          </button>
+          <div class="sm-item sm-disabled" aria-disabled="true">
+            <span class="sm-name">2027 S/S</span><span class="sm-tag">공개 예정</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="topnav-right">
@@ -3799,6 +3817,34 @@ function onSearchOutsideClick(e){
   /* the click that dismisses the panel already moved focus to whatever was
      clicked -- don't steal it back to the search toggle. */
   if(wrap && !wrap.contains(e.target)) closeSearch({restoreFocus:false});
+}
+
+function toggleSeasonMenu(){
+  document.getElementById('seasonMenu')?.classList.contains('open') ? closeSeasonMenu() : openSeasonMenu();
+}
+function openSeasonMenu(){
+  const menu = document.getElementById('seasonMenu');
+  if(!menu) return;
+  menu.classList.add('open');
+  document.getElementById('seasonToggleBtn')?.setAttribute('aria-expanded','true');
+  trapFocusIn(menu);
+  document.addEventListener('click', onSeasonOutsideClick);
+  document.addEventListener('keydown', onSeasonEscKey);
+}
+function closeSeasonMenu(opts){
+  const menu = document.getElementById('seasonMenu');
+  menu?.classList.remove('open');
+  document.getElementById('seasonToggleBtn')?.setAttribute('aria-expanded','false');
+  document.removeEventListener('click', onSeasonOutsideClick);
+  document.removeEventListener('keydown', onSeasonEscKey);
+  if(menu) releaseFocusTrap(menu, opts);
+}
+function onSeasonOutsideClick(e){
+  const wrap = document.querySelector('.season-wrap');
+  if(wrap && !wrap.contains(e.target)) closeSeasonMenu({restoreFocus:false});
+}
+function onSeasonEscKey(e){
+  if(e.key === 'Escape') closeSeasonMenu();
 }
 
 /* ---------------- MIX & MATCH ---------------- */
