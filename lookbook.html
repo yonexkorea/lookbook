@@ -70,13 +70,14 @@ h1,h2,h3{font-family:var(--display);font-weight:900;margin:0;letter-spacing:-.02
 /* ===== TOP NAV ===== */
 header.topnav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft);}
 .topnav-row{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 28px 10px;}
-.brand-wrap{display:flex;align-items:center;}
-.brand{display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:0;}
+.brand-wrap{display:flex;align-items:center;gap:10px;flex:none;}
+.brand{display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:0;}
 .brand .mark{height:16px;width:auto;flex:none;display:block;}
 .brand .name{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);}
-.brand .season{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;display:block;margin-top:1px;}
-.season-next{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;color:var(--muted);background:none;border:1px solid var(--line-soft);border-radius:20px;padding:3px 10px;margin-left:8px;opacity:.6;cursor:not-allowed;flex:none;}
-@media(max-width:400px){.season-next{display:none;}}
+.season-toggle{display:flex;align-items:center;border:1px solid var(--line-soft);border-radius:20px;overflow:hidden;flex:none;}
+.season-toggle .st-btn{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:4px 9px;white-space:nowrap;}
+.season-toggle .st-active{background:var(--ink);color:#fff;}
+.season-toggle .st-disabled{color:var(--muted);opacity:.55;cursor:not-allowed;}
 /* STYLE MIX + share + search as one right-aligned cluster, so a second
    flex child in .topnav-row (not three loose ones) is what space-between
    pushes to the far edge — kept together rather than spread apart. */
@@ -132,7 +133,7 @@ header.topnav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88)
    WEAR/EASY WEAR meet the row's edges (matching the utility row above
    it) only where the row is genuinely tight. */
 @media(max-width:480px){.catnav-row{justify-content:space-between;}}
-@media(max-width:400px){.brand .season{display:none;} .search-toggle{width:26px;height:26px;} .mix-link{height:26px;padding:0 10px;} .catnav-row{gap:16px;} .catnav-row button{font-size:11px;}}
+@media(max-width:400px){.season-toggle .st-btn{padding:3px 7px;font-size:10px;} .search-toggle{width:26px;height:26px;} .mix-link{height:26px;padding:0 10px;} .catnav-row{gap:16px;} .catnav-row button{font-size:11px;}}
 
 main#app{min-height:70vh;transition:opacity .22s var(--ease-out),transform .22s var(--ease-out),filter .22s var(--ease-out);}
 main#app.app-out{opacity:0;transform:translateY(-8px);filter:blur(3px);}
@@ -702,9 +703,12 @@ footer.lb-foot .eyebrow{justify-content:center;display:flex;text-transform:none;
     <div class="brand-wrap">
       <button class="brand" onclick="go('cover')">
         <img class="mark" src="images/yonex-mark.png" alt="Yonex">
-        <span><span class="name">YONEX LOOKBOOK</span><span class="season">2026 F/W</span></span>
+        <span class="name">YONEX LOOKBOOK</span>
       </button>
-      <span class="season-next" aria-disabled="true" title="2027 S/S · 공개 예정">2027 S/S</span>
+      <div class="season-toggle">
+        <span class="st-btn st-active">26 F/W</span>
+        <span class="st-btn st-disabled" aria-disabled="true" title="2027 S/S · 공개 예정">27 S/S</span>
+      </div>
     </div>
     <div class="topnav-right">
       <button class="mix-link" onclick="go('mix')">STYLE MIX</button>
